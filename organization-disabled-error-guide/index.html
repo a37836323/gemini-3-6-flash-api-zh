@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>2026 this organization has been disabled 怎么办：Gemini 3.6 Flash 排查</title>
+<meta name="description" content="this organization has been disabled 通常需要先确认请求落点与凭据归属，而非反复修改提示词。本文给出 Cline 可复制的诊断命令、账号侧与请求侧的判断边界，以及确认账号不可用后的 Gemini 3.6 Flash 切换处理。">
+<meta name="keywords" content="Gemini 3.6 Flash API,Gemini 3.6 Flash 定价,Gemini API,AI 模型 API,LLM API,API 定价,开发者工具,Google 模型">
+<link rel="canonical" href="https://a37836323.github.io/gemini-3-6-flash-api-zh/organization-disabled-error-guide/">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:title" content="2026 this organization has been disabled 怎么办：Gemini 3.6 Flash 排查">
+<meta property="og:description" content="this organization has been disabled 通常需要先确认请求落点与凭据归属，而非反复修改提示词。本文给出 Cline 可复制的诊断命令、账号侧与请求侧的判断边界，以及确认账号不可用后的 Gemini 3.6 Flash 切换处理。">
+<meta property="og:url" content="https://api.openlux.ai/">
+<meta property="og:site_name" content="OpenLux">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="2026 this organization has been disabled 怎么办：Gemini 3.6 Flash 排查">
+<meta name="twitter:description" content="this organization has been disabled 通常需要先确认请求落点与凭据归属，而非反复修改提示词。本文给出 Cline 可复制的诊断命令、账号侧与请求侧的判断边界，以及确认账号不可用后的 Gemini 3.6 Flash 切换处理。">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://api.openlux.ai/#organization",
+      "name": "OpenLux",
+      "url": "https://api.openlux.ai",
+      "description": "2026 年 Gemini 3.6 Flash API 定价数据：基础输入价格为每 1M tokens $1.50，输出价格为每 1M tokens $7.50，最终价格根据用户组倍率调整。",
+      "sameAs": [
+        "https://openlux.ai",
+        "https://doc.openlux.ai"
+      ]
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://a37836323.github.io/gemini-3-6-flash-api-zh/#website",
+      "url": "https://a37836323.github.io/gemini-3-6-flash-api-zh",
+      "name": "Gemini 3.6 Flash API 定价与配置指南 2026",
+      "inLanguage": "zh-CN",
+      "publisher": {
+        "@id": "https://api.openlux.ai/#organization"
+      }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://a37836323.github.io/gemini-3-6-flash-api-zh/organization-disabled-error-guide/#breadcrumb",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "OpenLux",
+          "item": "https://api.openlux.ai"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Gemini 3.6 Flash API",
+          "item": "https://a37836323.github.io/gemini-3-6-flash-api-zh/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "遇到 api error 400 this organization has been disabled，先定位失效边界",
+          "item": "https://a37836323.github.io/gemini-3-6-flash-api-zh/organization-disabled-error-guide/"
+        }
+      ]
+    },
+    {
+      "@type": "SoftwareApplication",
+      "@id": "https://a37836323.github.io/gemini-3-6-flash-api-zh/#application",
+      "name": "OpenLux API",
+      "applicationCategory": "DeveloperApplication",
+      "operatingSystem": "Any",
+      "url": "https://api.openlux.ai",
+      "description": "2026 年 Gemini 3.6 Flash API 定价数据：基础输入价格为每 1M tokens $1.50，输出价格为每 1M tokens $7.50，最终价格根据用户组倍率调整。",
+      "offers": {
+        "@type": "Offer",
+        "price": "待实测",
+        "priceCurrency": "CNY",
+        "url": "https://api.openlux.ai",
+        "description": "应用用户组倍率后，使用量按照列出的基础 token 费率计费。"
+      }
+    },
+    {
+      "@type": "TechArticle",
+      "@id": "https://a37836323.github.io/gemini-3-6-flash-api-zh/organization-disabled-error-guide/#article",
+      "headline": "遇到 api error 400 this organization has been disabled，先定位失效边界",
+      "datePublished": "2026-08-04",
+      "dateModified": "2026-08-05",
+      "inLanguage": "zh-CN",
+      "author": {
+        "@id": "https://api.openlux.ai/#organization"
+      },
+      "publisher": {
+        "@id": "https://api.openlux.ai/#organization"
+      },
+      "mainEntityOfPage": "https://a37836323.github.io/gemini-3-6-flash-api-zh/organization-disabled-error-guide/"
+    }
+  ]
+}
+</script>
+<style>*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:#ffffff;color:#0f172a;font-family:system-ui,"Noto Sans SC","PingFang SC","Microsoft YaHei",Arial,sans-serif;
+line-height:1.75;font-size:16px;-webkit-font-smoothing:antialiased;
+text-rendering:optimizeLegibility}
+.zone-zone19{max-width:860px;margin:0 auto;padding:32px 20px 64px}
+h1{font-size:1.85rem;line-height:1.4;margin:.2em 0 .6em;letter-spacing:-.01em}
+h2{font-size:1.3rem;margin:2.2em 0 .7em;padding-bottom:.35em;
+border-bottom:2px solid #cffafe}
+h3{font-size:1.08rem;margin:1.6em 0 .5em}
+a{color:#0891b2;text-decoration:none}
+a:hover,a:focus-visible{text-decoration:underline}
+code{background:#ecfeff;padding:.15em .4em;border-radius:2px;
+font-size:.9em;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+pre{background:#ecfeff;border:1px solid #cffafe;border-radius:6px;
+padding:16px;overflow-x:auto;font-size:.86rem;line-height:1.6}
+pre code{background:none;padding:0}
+table{width:100%;border-collapse:collapse;margin:1.2em 0;font-size:.94rem}
+th,td{border:1px solid #cffafe;padding:10px 12px;text-align:left}
+th{background:#ecfeff;font-weight:600}
+ul,ol{padding-left:1.5em}
+ul{list-style-type:circle}
+li{margin:.4em 0}
+.slot-col81{background:#ecfeff;border-left:3px solid #0891b2;
+border-radius:0 6px 6px 0;padding:14px 18px;margin:1.4em 0}
+.shell-deck90{display:inline-block;background:#0891b2;color:#fff;
+padding:12px 26px;border-radius:6px;font-weight:600;margin:.6em 0}
+.shell-deck90:hover{opacity:.88;text-decoration:none}
+.shell-unit69{color:#71717a;font-size:.86rem;margin-top:3em;
+padding-top:1.2em;border-top:1px solid #cffafe}
+.col-shell22{border:1px solid #cffafe;border-radius:6px;
+padding:2px 18px;margin:.8em 0}
+.block-col88{overflow-x:auto}
+@media(max-width:600px){
+  body{font-size:15px}
+  h1{font-size:1.5rem}
+  h2{font-size:1.18rem}
+  .zone-zone19{padding:20px 16px 48px}
+  table{font-size:.85rem}
+  th,td{padding:8px}
+}
+@media(prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important}
+}</style>
+</head>
+<body>
+<main class="zone-zone19">
+<p class="deck-zone85"><a href="https://a37836323.github.io/gemini-3-6-flash-api-zh/">首页</a> ／ Gemini 3.6 Flash</p>
+<h1>遇到 api error 400 this organization has been disabled，先定位失效边界</h1>
+<p>出现 api error 400 this organization has been disabled 时，先把它当作组织或账号归属问题处理，而不是 Gemini 3.6 Flash 的生成质量或提示词问题。用独立请求复现、核对实际 Base URL 和所加载的密钥后，才能区分本地配置错误与上游账号状态；后者通常不能靠重试恢复。</p>
+<div>
+<h2>api error 400 this organization has been disabled 在什么场景出现？</h2>
+<p>结论：该原文应按“组织已被禁用”这一服务端返回内容记录，常见可见入口是 Cline 的请求失败提示或终端日志，而不是补全功能里的 401 Unauthorized、429。请保留完整错误原文、发生时间、调用客户端和请求目标，避免只截取 Cline 的最后一行。</p>
+<p>先在与 Cline 相同的终端环境中确认相关变量是否存在：`env | grep -E &#x27;API|KEY|BASE|URL|MODEL&#x27;`。命令只用于观察当前 shell，不能证明配置文件、桌面应用或 IDE 插件实际读取了同一组值；若 Cline 运行在不同环境，还需在其配置界面核对。</p>
+<h2>this organization has been disabled 到底是账号级、请求级还是额度级？</h2>
+<p>结论：仅凭这条 400 文本，能够确定的是请求所关联的组织状态被上游拒绝；不能从已知信息推断具体禁用原因、恢复时间，或把它等同于额度耗尽。额度、密钥、组织和请求参数属于不同排查层级，必须分别验证。</p>
+<p>先用最小化请求排除 URL 拼接、认证头和模型字段的偏差：`curl -i &quot;$BASE_URL&quot; -H &quot;Authorization: Bearer $API_KEY&quot; -H &quot;Content-Type: application/json&quot; --data &#x27;{&quot;model&quot;:&quot;gemini-3.6-flash&quot;}&#x27;`。这里的 `$BASE_URL` 必须替换为当前实际请求地址；接口路径和请求体格式取决于所用服务，不应凭该示例猜测。若仍返回同一原文，再将响应头和响应体原样保存。</p>
+<h2>Cline 报 api error 时按什么顺序排查？</h2>
+<p>结论：先确认实际发往哪里，再确认密钥归属，最后才判断账号状态。先清理终端中可能覆盖配置的变量：`unset API_KEY BASE_URL MODEL`，随后重新打开 Cline 或其宿主终端并查看当前生效配置。执行前要确认这些变量确实由你临时设置，避免影响其他项目。</p>
+<p>第二步用非敏感信息比对配置来源：`printf &#x27;BASE_URL=%s
+MODEL=%s
+&#x27; &quot;$BASE_URL&quot; &quot;$MODEL&quot;`。模型标识应使用面板列出的 `gemini-3.6-flash`，不要把产品展示名 Gemini 3.6 Flash 当作可调用字段。不要在日志、截图或工单中发送完整 API key；只能提交脱敏后的前后缀和完整错误响应。</p>
+<h2>怎样确认不是 Cline 配置或单次请求导致的？</h2>
+<p>结论：同一密钥、同一实际地址下，独立最小请求与 Cline 都出现相同的 disabled 原文，才有理由将问题收敛到账号或组织侧；只在 Cline 出现时，仍应优先检查其供应商、Base URL、密钥槽位和模型名。这个判断是排查策略，不代表上游对组织状态的正式认定。</p>
+<p>可生成一次不含密钥的配置快照供自己比对：`printf &#x27;%s
+&#x27; &quot;base=$BASE_URL&quot; &quot;model=$MODEL&quot; &quot;key_set=$([ -n &quot;$API_KEY&quot; ] &amp;&amp; echo yes || echo no)&quot;`。不要把 `curl` 命令中的 Authorization 行复制到公开渠道。若响应改变为其他错误，应以新错误的原文为准，不要继续沿用 disabled 的处理路径。</p>
+<h2>确认账号侧不可用后，Gemini 3.6 Flash 怎么继续调用？</h2>
+<p>结论：可将调用目标切换到仍可使用、并实际提供 `gemini-3.6-flash` 的服务与凭据，再用最小请求验证；不要继续拿已返回 disabled 的组织反复重试。已知面板定价数据中，`gemini-3.6-flash` 在售，类型为 chat，基准输入价为 $1.5/100 万 token、输出价为 $7.5/100 万 token、缓存命中价为 $0.15/100 万 token。</p>
+<p>实际结算还会按用户分组倍率计算，不能把基准价直接当作你的最终价格；当前适用分组和最终金额需以面板为准。此页不展开购买、支付或接入流程。替换服务后，需要分别更新 Cline 中对应的地址、密钥和模型字段，并重新发起最小请求；服务是否兼容既有请求格式需要你用实际响应确认。</p>
+<h2>怎样避免 this organization has been disabled 再次打断开发？</h2>
+<p>结论：将凭据、调用地址、模型名和错误响应分开记录，并在切换客户端或环境后做一次最小请求检查，可以降低把配置混乱误判成账号故障的概率；它不能保证组织状态不会变化。对 Gemini 3.6 Flash，记录的可调用模型字段应为 `gemini-3.6-flash`。</p>
+<p>建议给每个项目维护一份不含密钥的运行记录：调用时间、客户端、实际 Base URL、模型字段、HTTP 状态和响应原文。密钥仅通过环境变量或受控配置保存，轮换或更换组织后立即删除旧变量。若再次出现相同 400，先对照这份记录定位变化项，再向当前服务方提交脱敏请求证据。</p>
+<p>还有其他问题？完整文档与客服入口见 <a href="https://api.openlux.ai/register?channel=c_lkv0gzwj" rel="nofollow noopener" data-cta="link">Gemini 3.6 Flash API</a>。</p>
+</div>
+<div>
+<h2>这个站还有这些内容</h2>
+<ul class="bar-layer29">
+<li><a href="https://a37836323.github.io/gemini-3-6-flash-api-zh/pricing/">Gemini 3.6 Flash API 多少钱？各版本价格与计费方式</a><span>各版本基准价、计费口径与倍率算法</span></li>
+<li><a href="https://a37836323.github.io/gemini-3-6-flash-api-zh/quickstart/">Gemini 3.6 Flash API 在国内怎么接入？</a><span>接入步骤与可直接复制的代码</span></li>
+<li><a href="https://a37836323.github.io/gemini-3-6-flash-api-zh/compare/">Gemini 3.6 Flash 用官方直连还是中转？逐项对比</a><span>逐项对比，含中转方案的局限</span></li>
+<li><a href="https://a37836323.github.io/gemini-3-6-flash-api-zh/faq/">Gemini 3.6 Flash API 常见问题</a><span>接入时最常遇到的问题</span></li>
+<li><a href="https://a37836323.github.io/gemini-3-6-flash-api-zh/gemini-36-flash-buy/">2026 年 Gemini 3.6 Flash API 在国内怎么买、多少钱、怎么付款</a><span>Gemini 3.6 Flash 购买</span></li>
+<li><a href="https://a37836323.github.io/gemini-3-6-flash-api-zh/gemini-flash-payment-methods/">没有国际信用卡，Gemini 3.6 Flash API 的付款方式怎么确认</a><span>Gemini 支付方式核验</span></li>
+<li><a href="https://a37836323.github.io/gemini-3-6-flash-api-zh/api-relay-explained/">API 中转站到底做了什么：从请求转发到风险取舍</a><span>理解 API 中转原理与边界</span></li>
+<li><a href="https://a37836323.github.io/gemini-3-6-flash-api-zh/claude-code-gemini-setup/">在 Claude Code 中接入 Gemini 3.6 Flash，先确认这几项兼容性</a><span>Claude Code 接入核查</span></li>
+<li><a href="https://a37836323.github.io/gemini-3-6-flash-api-zh/gemini-flash-cost-comparison/">2026 年 Gemini 3.6 Flash 的成本，和哪些模型放在一起算</a><span>Gemini 成本横向核算</span></li>
+<li><a href="https://a37836323.github.io/gemini-3-6-flash-api-zh/gemini-api-ban-risk/">用 Gemini 3.6 Flash API，封号风险该怎么判断？</a><span>封号与中转风险核查</span></li>
+<li><a href="https://a37836323.github.io/gemini-3-6-flash-api-zh/gemini-36-flash-free/">2026 年 Gemini 3.6 Flash API 怎么确认能否免费试用</a><span>核查免费试用边界</span></li>
+</ul>
+</div>
+<div>
+<h2>开始使用</h2>
+<p>查看当前定价记录，并在你的集成中验证 Gemini 3.6 Flash。</p>
+<p><a class="shell-deck90" href="https://api.openlux.ai/register?channel=c_lkv0gzwj" rel="nofollow noopener" data-cta="button">立即注册并生成密钥</a></p>
+<p>官方地址：<a href="https://api.openlux.ai/register?channel=c_lkv0gzwj" rel="nofollow noopener" data-cta="link">Gemini 3.6 Flash API</a></p>
+</div>
+<p class="shell-unit69">最后更新：2026年08月05日　|　本页由 OpenLux 编写并维护。<br>所有性能与价格数据来自实测，如与官网不一致，以官网实时页面为准。</p>
+</main>
+<script>
+(function(){
+  try{
+    var EP='https://tk.openlux.ai/collect',S='gemini-3-6-flash-api-zh',L='zh-CN',V=1;
+    var sid=Math.random().toString(36).slice(2)+Date.now().toString(36);
+    function send(type,extra){
+      try{
+        var p={v:V,t:type,s:S,l:L,sid:sid,
+               r:document.referrer||'',
+               p:location.pathname||'/',
+               q:location.search||'',
+               sw:screen.width||0,
+               tz:(Intl.DateTimeFormat().resolvedOptions()||{}).timeZone||''};
+        for(var k in extra){p[k]=extra[k];}
+        var body=JSON.stringify(p);
+        if(navigator.sendBeacon){
+          navigator.sendBeacon(EP,new Blob([body],{type:'text/plain;charset=UTF-8'}));
+        }else{
+          fetch(EP,{method:'POST',body:body,keepalive:true,mode:'no-cors'});
+        }
+      }catch(e){}
+    }
+    if(document.visibilityState==='prerender'){
+      document.addEventListener('visibilitychange',function h(){
+        if(document.visibilityState!=='prerender'){
+          document.removeEventListener('visibilitychange',h);send('view');
+        }
+      });
+    }else{
+      send('view');
+    }
+    document.addEventListener('click',function(e){
+      var a=e.target&&e.target.closest?e.target.closest('a[data-cta]'):null;
+      if(!a)return;
+      send('click',{c:a.getAttribute('data-cta')||'',h:a.href||''});
+    },{capture:true,passive:true});
+  }catch(e){}
+})();
+</script>
+</body>
+</html>
