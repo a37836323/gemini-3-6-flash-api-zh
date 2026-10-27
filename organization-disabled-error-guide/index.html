@@ -100,7 +100,7 @@
       "@id": "https://a37836323.github.io/gemini-3-6-flash-api-zh/organization-disabled-error-guide/#article",
       "headline": "遇到 api error 400 this organization has been disabled，先定位失效边界",
       "datePublished": "2026-08-04",
-      "dateModified": "2026-08-05",
+      "dateModified": "2026-10-27",
       "inLanguage": "zh-CN",
       "author": {
         "@id": "https://api.openlux.ai/#organization"
@@ -159,10 +159,11 @@ padding:2px 18px;margin:.8em 0}
 </head>
 <body>
 <main class="zone-zone19">
-<p data-notice="price-20261025" style="margin:0 0 16px;padding:10px 14px;border:1px solid #f0c36d;background:#fff8e6;color:#5c4400;border-radius:6px;font-size:14px;line-height:1.6">本页价格与模型信息整理于 2026 年 8 月，可能已有变化，请以官网为准：<a href="https://www.openlux.ai/pricing?utm_source=gemini-3-6-flash-api-zh&amp;utm_medium=satellite&amp;utm_campaign=price_notice" style="color:#0b57d0">OpenLux 官网价格页</a></p>
+<p data-notice="price-20261025" style="margin:0 0 16px;padding:10px 14px;border:1px solid #f0c36d;background:#fff8e6;color:#5c4400;border-radius:6px;font-size:14px;line-height:1.6">本页价格与模型信息可能已有变化，请以官网为准：<a href="https://www.openlux.ai/pricing?utm_source=gemini-3-6-flash-api-zh&amp;utm_medium=satellite&amp;utm_campaign=price_notice" style="color:#0b57d0">OpenLux 官网价格页</a></p>
 <p class="deck-zone85"><a href="https://a37836323.github.io/gemini-3-6-flash-api-zh/">首页</a> ／ Gemini 3.6 Flash</p>
 <h1>遇到 api error 400 this organization has been disabled，先定位失效边界</h1>
 <p>出现 api error 400 this organization has been disabled 时，先把它当作组织或账号归属问题处理，而不是 Gemini 3.6 Flash 的生成质量或提示词问题。用独立请求复现、核对实际 Base URL 和所加载的密钥后，才能区分本地配置错误与上游账号状态；后者通常不能靠重试恢复。</p>
+
 <div>
 <h2>api error 400 this organization has been disabled 在什么场景出现？</h2>
 <p>结论：该原文应按“组织已被禁用”这一服务端返回内容记录，常见可见入口是 Cline 的请求失败提示或终端日志，而不是补全功能里的 401 Unauthorized、429。请保留完整错误原文、发生时间、调用客户端和请求目标，避免只截取 Cline 的最后一行。</p>
@@ -185,7 +186,7 @@ MODEL=%s
 <h2>怎样避免 this organization has been disabled 再次打断开发？</h2>
 <p>结论：将凭据、调用地址、模型名和错误响应分开记录，并在切换客户端或环境后做一次最小请求检查，可以降低把配置混乱误判成账号故障的概率；它不能保证组织状态不会变化。对 Gemini 3.6 Flash，记录的可调用模型字段应为 `gemini-3.6-flash`。</p>
 <p>建议给每个项目维护一份不含密钥的运行记录：调用时间、客户端、实际 Base URL、模型字段、HTTP 状态和响应原文。密钥仅通过环境变量或受控配置保存，轮换或更换组织后立即删除旧变量。若再次出现相同 400，先对照这份记录定位变化项，再向当前服务方提交脱敏请求证据。</p>
-<p>还有其他问题？完整文档与客服入口见 <a href="https://api.openlux.ai/register?channel=c_3kz2fx8n" rel="nofollow noopener" data-cta="link">Gemini 3.6 Flash API</a>。</p>
+<p>还有其他问题？完整文档与客服入口见 <a href="https://api.openlux.ai/register?channel=c_3kz2fx8n" rel="nofollow noopener" data-cta="docs">Gemini 3.6 Flash API</a>。</p>
 </div>
 <div>
 <h2>这个站还有这些内容</h2>
@@ -201,15 +202,16 @@ MODEL=%s
 <li><a href="https://a37836323.github.io/gemini-3-6-flash-api-zh/gemini-flash-cost-comparison/">2026 年 Gemini 3.6 Flash 的成本，和哪些模型放在一起算</a><span>Gemini 成本横向核算</span></li>
 <li><a href="https://a37836323.github.io/gemini-3-6-flash-api-zh/gemini-api-ban-risk/">用 Gemini 3.6 Flash API，封号风险该怎么判断？</a><span>封号与中转风险核查</span></li>
 <li><a href="https://a37836323.github.io/gemini-3-6-flash-api-zh/gemini-36-flash-free/">2026 年 Gemini 3.6 Flash API 怎么确认能否免费试用</a><span>核查免费试用边界</span></li>
+<li><a href="https://a37836323.github.io/gemini-3-6-flash-api-zh/gemini-3-6-flash-migration-400-error-fix/">换成 gemini-3.6-flash 后报 400：迁移清单逐项怎么改</a><span>迁移报 400 怎么改</span></li>
 </ul>
 </div>
 <div>
 <h2>开始使用</h2>
 <p>查看当前定价记录，并在你的集成中验证 Gemini 3.6 Flash。</p>
-<p><a class="shell-deck90" href="https://api.openlux.ai/register?channel=c_3kz2fx8n" rel="nofollow noopener" data-cta="button">立即注册并生成密钥</a></p>
-<p>官方地址：<a href="https://api.openlux.ai/register?channel=c_3kz2fx8n" rel="nofollow noopener" data-cta="link">Gemini 3.6 Flash API</a></p>
+<p><a class="shell-deck90" href="https://api.openlux.ai/register?channel=c_3kz2fx8n" rel="nofollow noopener" data-cta="register-bottom">创建账号，开始接入</a></p>
+<p>账号入口：<a href="https://api.openlux.ai/register?channel=c_3kz2fx8n" rel="nofollow noopener" data-cta="link">Gemini 3.6 Flash API</a></p>
 </div>
-<p class="shell-unit69">最后更新：2026年08月05日　|　本页由 OpenLux 编写并维护。<br>所有性能与价格数据来自实测，如与官网不一致，以官网实时页面为准。</p>
+<p class="shell-unit69">最后更新：2026年10月27日　|　本页由 OpenLux 编写并维护。<br>价格资料以文中标注的数据来源和查询日期为准；未完成的性能测试不作为承诺。实际可用性与计费以控制台为准。</p>
 </main>
 <script>
 (function(){
