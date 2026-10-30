@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>gemini-3.6-flash 视频 fps 和截取片段怎么设：Interactions 报 400 Unknown parameter &#x27;video_metadata&#x27; 的改法</title>
+<meta name="description" content="给 gemini-3.6-flash 传视频时想调帧率或只分析一段：Interactions 接口要把 fps、start_offset、end_offset 写进视频块的 processing 对象（仅 static 模式），写 video_metadata 会报 400；generateContent 接口用 Part 的 videoMetadata。本页按官方文档说明两种写法、取值格式、token 影响和验证方法。">
+<meta name="keywords" content="Gemini 3.6 Flash API,Gemini 3.6 Flash 定价,Gemini API,AI 模型 API,LLM API,API 定价,开发者工具,Google 模型">
+<link rel="canonical" href="https://a37836323.github.io/gemini-3-6-flash-api-zh/gemini-3-6-flash-video-fps-clip-video-metadata-400-fix/">
+<link rel="alternate" hreflang="zh-CN" href="https://a37836323.github.io/gemini-3-6-flash-api-zh/">
+<link rel="alternate" hreflang="ar-SA" href="https://gemini-3-6-flash-api-ar.vercel.app/">
+<link rel="alternate" hreflang="de-DE" href="https://gemini-3-6-flash-api-de.pages.dev/">
+<link rel="alternate" hreflang="es-ES" href="https://gemini-3-6-flash-api-es.pages.dev/">
+<link rel="alternate" hreflang="fr-FR" href="https://gemini-3-6-flash-api-fr.pages.dev/">
+<link rel="alternate" hreflang="id-ID" href="https://gemini-3-6-flash-api-id.pages.dev/">
+<link rel="alternate" hreflang="ja-JP" href="https://a37836323.github.io/gemini-3-6-flash-api-ja/">
+<link rel="alternate" hreflang="ko-KR" href="https://a37836323.github.io/gemini-3-6-flash-api-ko/">
+<link rel="alternate" hreflang="pt-BR" href="https://gemini-3-6-flash-api-pt.pages.dev/">
+<link rel="alternate" hreflang="ru-RU" href="https://gemini-3-6-flash-api-ru.vercel.app/">
+<link rel="alternate" hreflang="tr-TR" href="https://gemini-3-6-flash-api-tr.vercel.app/">
+<link rel="alternate" hreflang="vi-VN" href="https://gemini-3-6-flash-api-vi.vercel.app/">
+<link rel="alternate" hreflang="en-US" href="https://a37836323.github.io/gemini-3-6-flash-api/">
+<link rel="alternate" hreflang="x-default" href="https://a37836323.github.io/gemini-3-6-flash-api-zh/">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:title" content="gemini-3.6-flash 视频 fps 和截取片段怎么设：Interactions 报 400 Unknown parameter &#x27;video_metadata&#x27; 的改法">
+<meta property="og:description" content="给 gemini-3.6-flash 传视频时想调帧率或只分析一段：Interactions 接口要把 fps、start_offset、end_offset 写进视频块的 processing 对象（仅 static 模式），写 video_metadata 会报 400；generateContent 接口用 Part 的 videoMetadata。本页按官方文档说明两种写法、取值格式、token 影响和验证方法。">
+<meta property="og:url" content="https://api.openlux.ai/">
+<meta property="og:site_name" content="OpenLux">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="gemini-3.6-flash 视频 fps 和截取片段怎么设：Interactions 报 400 Unknown parameter &#x27;video_metadata&#x27; 的改法">
+<meta name="twitter:description" content="给 gemini-3.6-flash 传视频时想调帧率或只分析一段：Interactions 接口要把 fps、start_offset、end_offset 写进视频块的 processing 对象（仅 static 模式），写 video_metadata 会报 400；generateContent 接口用 Part 的 videoMetadata。本页按官方文档说明两种写法、取值格式、token 影响和验证方法。">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://api.openlux.ai/#organization",
+      "name": "OpenLux",
+      "url": "https://api.openlux.ai",
+      "description": "2026 年 Gemini 3.6 Flash API 定价数据：基础输入价格为每 1M tokens $1.50，输出价格为每 1M tokens $7.50，最终价格根据用户组倍率调整。",
+      "sameAs": [
+        "https://openlux.ai",
+        "https://doc.openlux.ai"
+      ]
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://a37836323.github.io/gemini-3-6-flash-api-zh/#website",
+      "url": "https://a37836323.github.io/gemini-3-6-flash-api-zh",
+      "name": "Gemini 3.6 Flash API 定价与配置指南 2026",
+      "inLanguage": "zh-CN",
+      "publisher": {
+        "@id": "https://api.openlux.ai/#organization"
+      }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://a37836323.github.io/gemini-3-6-flash-api-zh/gemini-3-6-flash-video-fps-clip-video-metadata-400-fix/#breadcrumb",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "OpenLux",
+          "item": "https://api.openlux.ai"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Gemini 3.6 Flash API",
+          "item": "https://a37836323.github.io/gemini-3-6-flash-api-zh/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "gemini-3.6-flash 视频帧率与截取片段的正确写法",
+          "item": "https://a37836323.github.io/gemini-3-6-flash-api-zh/gemini-3-6-flash-video-fps-clip-video-metadata-400-fix/"
+        }
+      ]
+    },
+    {
+      "@type": "SoftwareApplication",
+      "@id": "https://a37836323.github.io/gemini-3-6-flash-api-zh/#application",
+      "name": "OpenLux API",
+      "applicationCategory": "DeveloperApplication",
+      "operatingSystem": "Any",
+      "url": "https://api.openlux.ai",
+      "description": "2026 年 Gemini 3.6 Flash API 定价数据：基础输入价格为每 1M tokens $1.50，输出价格为每 1M tokens $7.50，最终价格根据用户组倍率调整。",
+      "offers": {
+        "@type": "Offer",
+        "price": "待实测",
+        "priceCurrency": "CNY",
+        "url": "https://api.openlux.ai",
+        "description": "应用用户组倍率后，使用量按照列出的基础 token 费率计费。"
+      }
+    },
+    {
+      "@type": "TechArticle",
+      "@id": "https://a37836323.github.io/gemini-3-6-flash-api-zh/gemini-3-6-flash-video-fps-clip-video-metadata-400-fix/#article",
+      "headline": "gemini-3.6-flash 视频帧率与截取片段的正确写法",
+      "datePublished": "2026-08-04",
+      "dateModified": "2026-10-30",
+      "inLanguage": "zh-CN",
+      "author": {
+        "@id": "https://api.openlux.ai/#organization"
+      },
+      "publisher": {
+        "@id": "https://api.openlux.ai/#organization"
+      },
+      "mainEntityOfPage": "https://a37836323.github.io/gemini-3-6-flash-api-zh/gemini-3-6-flash-video-fps-clip-video-metadata-400-fix/"
+    }
+  ]
+}
+</script>
+<style>*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:#ffffff;color:#0f172a;font-family:system-ui,"Noto Sans SC","PingFang SC","Microsoft YaHei",Arial,sans-serif;
+line-height:1.75;font-size:16px;-webkit-font-smoothing:antialiased;
+text-rendering:optimizeLegibility}
+.zone-zone19{max-width:860px;margin:0 auto;padding:32px 20px 64px}
+h1{font-size:1.85rem;line-height:1.4;margin:.2em 0 .6em;letter-spacing:-.01em}
+h2{font-size:1.3rem;margin:2.2em 0 .7em;padding-bottom:.35em;
+border-bottom:2px solid #cffafe}
+h3{font-size:1.08rem;margin:1.6em 0 .5em}
+a{color:#0891b2;text-decoration:none}
+a:hover,a:focus-visible{text-decoration:underline}
+code{background:#ecfeff;padding:.15em .4em;border-radius:2px;
+font-size:.9em;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+pre{background:#ecfeff;border:1px solid #cffafe;border-radius:6px;
+padding:16px;overflow-x:auto;font-size:.86rem;line-height:1.6}
+pre code{background:none;padding:0}
+table{width:100%;border-collapse:collapse;margin:1.2em 0;font-size:.94rem}
+th,td{border:1px solid #cffafe;padding:10px 12px;text-align:left}
+th{background:#ecfeff;font-weight:600}
+ul,ol{padding-left:1.5em}
+ul{list-style-type:circle}
+li{margin:.4em 0}
+.slot-col81{background:#ecfeff;border-left:3px solid #0891b2;
+border-radius:0 6px 6px 0;padding:14px 18px;margin:1.4em 0}
+.shell-deck90{display:inline-block;background:#0891b2;color:#fff;
+padding:12px 26px;border-radius:6px;font-weight:600;margin:.6em 0}
+.shell-deck90:hover{opacity:.88;text-decoration:none}
+.shell-unit69{color:#71717a;font-size:.86rem;margin-top:3em;
+padding-top:1.2em;border-top:1px solid #cffafe}
+.col-shell22{border:1px solid #cffafe;border-radius:6px;
+padding:2px 18px;margin:.8em 0}
+.block-col88{overflow-x:auto}
+@media(max-width:600px){
+  body{font-size:15px}
+  h1{font-size:1.5rem}
+  h2{font-size:1.18rem}
+  .zone-zone19{padding:20px 16px 48px}
+  table{font-size:.85rem}
+  th,td{padding:8px}
+}
+@media(prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important}
+}</style>
+</head>
+<body>
+<main class="zone-zone19">
+<p data-notice="price-20261025" style="margin:0 0 16px;padding:10px 14px;border:1px solid #f0c36d;background:#fff8e6;color:#5c4400;border-radius:6px;font-size:14px;line-height:1.6">本页价格与模型信息可能已有变化，请以官网为准：<a href="https://www.openlux.ai/pricing?utm_source=gemini-3-6-flash-api-zh&amp;utm_medium=satellite&amp;utm_campaign=price_notice" style="color:#0b57d0">OpenLux 官网价格页</a></p>
+<p class="deck-zone85"><a href="https://a37836323.github.io/gemini-3-6-flash-api-zh/">首页</a> ／ Gemini 3.6 Flash</p>
+<h1>gemini-3.6-flash 视频帧率与截取片段的正确写法</h1>
+<p>用 gemini-3.6-flash 分析视频时，想把抽帧率从默认的每秒 1 帧调高或调低、或者只分析其中一段，写法取决于你用的接口：Interactions 接口（interactions.create、/v1beta/interactions）要把 fps、start_offset、end_offset 写进视频输入块的 processing 对象，并且只在 static 模式下有效；照旧教程传 video_metadata 会被拒绝，返回 400 Unknown parameter。generateContent 接口则在 Part 上用 videoMetadata，起止时间是带 s 的秒数字符串。下面按 Google 官方视频理解指南和 API 参考逐项说明怎么改、改完怎么确认生效。</p>
+
+<div>
+<h2>先确认你用的是哪个接口</h2>
+<p>Gemini API 有两套调用视频的方式，帧率和截取的写法不一样，混用就会报错或不生效。代码里调用 client.interactions.create，或请求地址是 /v1beta/interactions 的，属于 Interactions 接口；调用 generate_content，或请求地址是 /v1beta/models/gemini-3.6-flash:generateContent 的，属于 generateContent 接口。</p>
+<p>Google 官方视频理解指南（https://ai.google.dev/gemini-api/docs/video-understanding，页面标注 2026 年 10 月 13 日更新）的代码示例全部使用 Interactions 接口。generateContent 接口的字段定义在 API 参考页（https://ai.google.dev/api/generate-content）的 Part 和 VideoMetadata 一节。</p>
+<p>两种接口都默认按每秒 1 帧静态抽帧（官方称为 static 处理）。官方指南提醒，默认 1 帧每秒可能漏掉快速动作或镜头切换的细节；反过来，对讲座、会议这类画面变化慢的长视频，可以降低帧率来减少帧的 token。</p>
+<h2>Interactions 接口：fps 和起止时间写进 processing 对象</h2>
+<p>官方指南写明：可以在 processing 配置对象里传 fps 参数来自定义抽帧率，也可以在同一个对象里写 start_offset 和 end_offset 来截取视频。processing 是 input 数组里视频块（type 为 video）的一个字段，和 uri、mime_type 并列，不是 interactions.create 的顶层参数，也不放在 generation_config 里。</p>
+<p>官方示例的写法是：视频块里写 &quot;processing&quot;: {&quot;type&quot;: &quot;static&quot;, &quot;fps&quot;: 0.5}，表示每 2 秒抽 1 帧；截取片段写 &quot;processing&quot;: {&quot;type&quot;: &quot;static&quot;, &quot;start_offset&quot;: 1200, &quot;end_offset&quot;: 1500}。fps 和起止时间可以写在同一个 processing 对象里，type 都要写成 static。</p>
+<p>需要注意两点。第一，官方示例里的 start_offset、end_offset 是不带单位的整数，指南没有写明单位；按示例填整数，再用下文的验证方法确认截取的是想要的那一段。第二，指南没有给出 Interactions 接口里 fps 的取值范围；generateContent 的 API 参考写的是大于 0、不超过 24，可以作为参考，但以实际返回为准。</p>
+<p>官方的 Python 示例中 input 用的是字典列表，processing 作为视频字典的一个键直接写进去即可；REST 请求把同样的 JSON 放进请求体的 input 数组。</p>
+<h2>为什么会报 400 Unknown parameter &#x27;video_metadata&#x27;</h2>
+<p>在 googleapis/python-genai 的 issue 2727（https://github.com/googleapis/python-genai/issues/2727）中，提问者照 Gemini cookbook 的写法给 interactions.create 传 video_metadata=types.VideoMetadata(fps=2)，在 google-genai 2.11.0 上先是被 SDK 拦下，报 TypeError: create() got unexpected keyword argument(s): video_metadata；改用 extra_body 传过去后，接口返回 400 Unknown parameter &#x27;video_metadata&#x27;，写成 videoMetadata 也一样。</p>
+<p>该 issue 下的回复说明：cookbook 示例领先于当时的正式版 SDK，并引用 Interactions 接口概览文档，指出 video_metadata 字段在 Interactions 接口里还不支持。现行的官方视频理解指南给出的写法就是上一节的 processing 对象，所以 Interactions 接口里应当删掉 video_metadata，改写 processing。</p>
+<p>同一个 issue 里，提问者还观察到把 fps 直接写在视频块上（与 uri 并列），或写进 generation_config，请求不会报错，但 usage 里的输入 token 数和不写时完全一样，也就是设置没有生效。这类「不报错但没效果」的写法比 400 更难发现，改完一定要按最后一节对比 token。</p>
+<p>反过来，如果你用的是 generateContent 接口，却把 processing 对象照搬过去，也不符合 API 参考里 Part 的字段定义。两种接口的字段不要混用。</p>
+<h2>generateContent 接口：Part 的 videoMetadata 写法</h2>
+<p>API 参考写明：Part 上有一个可选的 videoMetadata 对象，只在视频通过 inlineData（内联数据）或 fileData（文件地址）传入时设置。它有三个字段：startOffset、endOffset、fps。</p>
+<p>startOffset 和 endOffset 是 Duration 格式的字符串，即以秒计、最多 9 位小数、末尾带 s，例如 &quot;3.5s&quot;。截取第 20 分钟到第 25 分钟，写成 &quot;startOffset&quot;: &quot;1200s&quot;, &quot;endOffset&quot;: &quot;1500s&quot;。写成不带 s 的数字，或者照搬 Interactions 示例里的整数写法，都不符合这个格式。</p>
+<p>fps 是数字，表示送给模型的帧率；不写时默认 1.0，取值范围是大于 0.0、不超过 24.0。也就是说 0 不是合法值，想降低帧率要写 0.5、0.2 这样的小数，最高写到 24。</p>
+<p>REST 请求里一个视频 Part 的结构是：fileData（含 mimeType 和 fileUri）或 inlineData（含 mimeType 和 data），再加上同级的 videoMetadata，例如 &quot;videoMetadata&quot;: {&quot;fps&quot;: 2, &quot;startOffset&quot;: &quot;60s&quot;, &quot;endOffset&quot;: &quot;120s&quot;}。官方指南建议单个视频时把文字提示放在视频 Part 之后。</p>
+<h2>fps、分辨率和 token 的关系</h2>
+<p>官方指南给出的静态处理计费口径是：media_resolution 设为 low 时每帧 66 个 token，否则每帧 258 个 token；音频按每秒 32 个 token 计。默认（低分辨率）下大约每秒视频 100 个 token，高分辨率下大约每秒 300 个 token。</p>
+<p>按这个口径，帧的 token 按抽到的帧数计算：把 fps 从 1 调到 0.5，帧数减半，帧这部分 token 也随之减少；调到 2，帧这部分就会增加。音频部分按视频秒数计，不受 fps 影响。截取片段则同时减少帧和音频的时长。</p>
+<p>media_resolution 决定每帧最多分配多少 token，和 processing 互相独立，官方写明可以在同一个视频输入上同时设置。generateContent 的 API 参考里，Part 的 mediaResolution 用 level 字段，可选 MEDIA_RESOLUTION_LOW、MEDIA_RESOLUTION_MEDIUM、MEDIA_RESOLUTION_HIGH、MEDIA_RESOLUTION_ULTRA_HIGH。</p>
+<p>指南还写明，1M 上下文的模型默认（低分辨率）大约能处理 3 小时视频，高分辨率约 1 小时；提高 fps 也会让同样时长的视频占用更多上下文。gemini-3.6-flash 的上下文长度以官方模型页为准，费用以官网价格页为准。</p>
+<h2>开了 agentic 模式就不要再写 fps</h2>
+<p>官方指南写明，Gemini 4 Argon、3.8 Flash、3.6 Flash 和 3.5 Flash Lite 支持智能体式视频理解：在 Interactions 接口的视频块里写 &quot;processing&quot;: &quot;agentic&quot;，模型会自己决定看哪些时间段、以什么帧率查看，而不是固定抽帧。默认仍是 static。</p>
+<p>指南同时写明，fps、start_offset、end_offset 这些自定义选项只在 static 模式下支持。agentic 模式下再写这些参数会不会报错，官方没有说明，所以要固定帧率或截取片段，就把 type 写成 static；想让模型自己挑片段，就用 agentic，不要两者混写。</p>
+<p>同一个请求里可以放多个视频块，分别写 agentic 和 static，官方示例就是一段讲座用 agentic、一段实验视频用 static。</p>
+<h2>改完怎么确认设置生效</h2>
+<p>第一步，用一段几分钟的短视频，在同一个提问下分别发两次请求：一次不写 fps，一次把 fps 设为 0.5（Interactions 写在 processing 里，generateContent 写在 videoMetadata 里）。返回 200 且没有 400 Unknown parameter，说明字段位置被接受。</p>
+<p>第二步，对比两次的输入 token：Interactions 接口看返回 usage 里的 total_input_tokens，generateContent 看 usageMetadata 里的 promptTokenCount。按上一节的口径，帧率减半后输入 token 应明显下降；如果两次完全相同，就是遇到了 issue 里那种「写了但没生效」的情况，检查字段是不是写错了位置。</p>
+<p>第三步，验证截取：选一段开头和结尾内容明显不同的视频，只截取后半段，问模型视频里出现了什么。回答里不应出现截取范围之外的内容，同时输入 token 应比整段视频少。</p>
+<p>长视频请求耗时较长时，官方指南提醒：同步、非流式请求在高负载下可能因为后端重试超出连接或鉴权有效期，表现为意外的 401 Unauthorized 或超时；建议改用流式或后台执行（background 设为 true 后轮询结果）。如果长视频一直 401 而短视频正常，先按这个方向排查，而不是先怀疑 Key。</p>
+<h2>通过 OpenLux 中转调用时要注意什么</h2>
+<p>OpenLux 价格接口里在售的模型 ID 有 gemini-3.6-flash，支持的接口类型标注为 gemini（Gemini 原生格式）和 openai（OpenAI 兼容格式）。</p>
+<p>用 Gemini 原生格式时，Base URL 填 https://api.openlux.ai，请求路径是 /v1beta/models/gemini-3.6-flash:generateContent，Key 放在 x-goog-api-key 请求头或查询参数 key 里。这条路径走的是 generateContent，所以帧率和截取用上文 Part 的 videoMetadata 写法。videoMetadata 是 Gemini 原生字段，OpenAI 兼容格式下怎么传视频不在本页范围内。</p>
+<p>Interactions 接口（/v1beta/interactions）和用 Google Files API 上传得到的文件地址，通过中转能否使用，本页没有核实；本页也没有用真实 Key 跑通过视频请求。建议先用一段较短的视频按上一节的方法验证，确认 token 变化符合预期再放到正式业务里。</p>
+<p>Key 在 OpenLux 控制台的令牌页创建；价格以官网价格页为准。</p>
+<p>还有其他问题？完整文档与客服入口见 <a href="https://api.openlux.ai/register?channel=c_3kz2fx8n" rel="nofollow noopener" data-cta="docs">Gemini 3.6 Flash API</a>。</p>
+</div>
+<div>
+<h2>这个站还有这些内容</h2>
+<ul class="bar-layer29">
+<li><a href="https://a37836323.github.io/gemini-3-6-flash-api-zh/pricing/">Gemini 3.6 Flash API 多少钱？各版本价格与计费方式</a><span>各版本基准价、计费口径与倍率算法</span></li>
+<li><a href="https://a37836323.github.io/gemini-3-6-flash-api-zh/quickstart/">Gemini 3.6 Flash API 在国内怎么接入？</a><span>接入步骤与可直接复制的代码</span></li>
+<li><a href="https://a37836323.github.io/gemini-3-6-flash-api-zh/compare/">Gemini 3.6 Flash 用官方直连还是中转？逐项对比</a><span>逐项对比，含中转方案的局限</span></li>
+<li><a href="https://a37836323.github.io/gemini-3-6-flash-api-zh/faq/">Gemini 3.6 Flash API 常见问题</a><span>接入时最常遇到的问题</span></li>
+<li><a href="https://a37836323.github.io/gemini-3-6-flash-api-zh/gemini-36-flash-buy/">2026 年 Gemini 3.6 Flash API 在国内怎么买、多少钱、怎么付款</a><span>Gemini 3.6 Flash 购买</span></li>
+<li><a href="https://a37836323.github.io/gemini-3-6-flash-api-zh/gemini-flash-payment-methods/">没有国际信用卡，Gemini 3.6 Flash API 的付款方式怎么确认</a><span>Gemini 支付方式核验</span></li>
+<li><a href="https://a37836323.github.io/gemini-3-6-flash-api-zh/api-relay-explained/">API 中转站到底做了什么：从请求转发到风险取舍</a><span>理解 API 中转原理与边界</span></li>
+<li><a href="https://a37836323.github.io/gemini-3-6-flash-api-zh/claude-code-gemini-setup/">在 Claude Code 中接入 Gemini 3.6 Flash，先确认这几项兼容性</a><span>Claude Code 接入核查</span></li>
+<li><a href="https://a37836323.github.io/gemini-3-6-flash-api-zh/gemini-flash-cost-comparison/">2026 年 Gemini 3.6 Flash 的成本，和哪些模型放在一起算</a><span>Gemini 成本横向核算</span></li>
+<li><a href="https://a37836323.github.io/gemini-3-6-flash-api-zh/gemini-api-ban-risk/">用 Gemini 3.6 Flash API，封号风险该怎么判断？</a><span>封号与中转风险核查</span></li>
+<li><a href="https://a37836323.github.io/gemini-3-6-flash-api-zh/gemini-36-flash-free/">2026 年 Gemini 3.6 Flash API 怎么确认能否免费试用</a><span>核查免费试用边界</span></li>
+<li><a href="https://a37836323.github.io/gemini-3-6-flash-api-zh/organization-disabled-error-guide/">遇到 api error 400 this organization has been disabled，先定位失效边界</a><span>组织禁用报错排查</span></li>
+<li><a href="https://a37836323.github.io/gemini-3-6-flash-api-zh/gemini-3-6-flash-migration-400-error-fix/">换成 gemini-3.6-flash 后报 400：迁移清单逐项怎么改</a><span>迁移报 400 怎么改</span></li>
+</ul>
+</div>
+<div>
+<h2>开始使用</h2>
+<p>查看当前定价记录，并在你的集成中验证 Gemini 3.6 Flash。</p>
+<p><a class="shell-deck90" href="https://api.openlux.ai/register?channel=c_3kz2fx8n" rel="nofollow noopener" data-cta="register-bottom">创建账号，开始接入</a></p>
+<p>账号入口：<a href="https://api.openlux.ai/register?channel=c_3kz2fx8n" rel="nofollow noopener" data-cta="link">Gemini 3.6 Flash API</a></p>
+</div>
+<p class="shell-unit69">最后更新：2026年10月30日　|　本页由 OpenLux 编写并维护。<br>价格资料以文中标注的数据来源和查询日期为准；未完成的性能测试不作为承诺。实际可用性与计费以控制台为准。</p>
+</main>
+<script>
+(function(){
+  try{
+    var EP='https://tk.openlux.ai/collect',S='gemini-3-6-flash-api-zh',L='zh-CN',V=1;
+    var sid=Math.random().toString(36).slice(2)+Date.now().toString(36);
+    function send(type,extra){
+      try{
+        var p={v:V,t:type,s:S,l:L,sid:sid,
+               r:document.referrer||'',
+               p:location.pathname||'/',
+               q:location.search||'',
+               sw:screen.width||0,
+               tz:(Intl.DateTimeFormat().resolvedOptions()||{}).timeZone||''};
+        for(var k in extra){p[k]=extra[k];}
+        var body=JSON.stringify(p);
+        if(navigator.sendBeacon){
+          navigator.sendBeacon(EP,new Blob([body],{type:'text/plain;charset=UTF-8'}));
+        }else{
+          fetch(EP,{method:'POST',body:body,keepalive:true,mode:'no-cors'});
+        }
+      }catch(e){}
+    }
+    if(document.visibilityState==='prerender'){
+      document.addEventListener('visibilitychange',function h(){
+        if(document.visibilityState!=='prerender'){
+          document.removeEventListener('visibilitychange',h);send('view');
+        }
+      });
+    }else{
+      send('view');
+    }
+    document.addEventListener('click',function(e){
+      var a=e.target&&e.target.closest?e.target.closest('a[data-cta]'):null;
+      if(!a)return;
+      send('click',{c:a.getAttribute('data-cta')||'',h:a.href||''});
+    },{capture:true,passive:true});
+  }catch(e){}
+})();
+</script>
+</body>
+</html>
